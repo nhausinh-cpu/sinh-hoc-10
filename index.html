@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thuật ngữ Sinh học 10</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: sổ tay thuật ngữ — đầu trang màu lá, chip chủ đề, danh sách thẻ từ; tab trò chơi ôn bài. */
+:root{
+  --bg:#F2F7EF; --surface:#FFFFFF; --ink:#16301F; --muted:#56705F; --line:#D5E5D0;
+  --leaf:#2E8B4E; --leaf-soft:#E2F3E3; --on-leaf:#FFFFFF;
+  --sun:#F5B83D; --sun-soft:#FFF2D2; --cyto:#7B5CC4; --cyto-soft:#EEE8FB;
+  --good:#1B8A4C; --good-soft:#DDF5E6; --bad:#C73A55; --bad-soft:#FCE4EA;
+  --display:"Lexend","Be Vietnam Pro",system-ui,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ipa:"Noto Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1A13; --surface:#17261C; --ink:#E4F0E6; --muted:#9DB8A5; --line:#2A4032;
+  --leaf:#4CC072; --leaf-soft:#1E3A27; --on-leaf:#0B1A10;
+  --sun:#F5C35A; --sun-soft:#3A3017; --cyto:#B39BF0; --cyto-soft:#2B2442;
+  --good:#5BD38B; --good-soft:#173A25; --bad:#F07A92; --bad-soft:#401D26; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A13; --surface:#17261C; --ink:#E4F0E6; --muted:#9DB8A5; --line:#2A4032;
+  --leaf:#4CC072; --leaf-soft:#1E3A27; --on-leaf:#0B1A10;
+  --sun:#F5C35A; --sun-soft:#3A3017; --cyto:#B39BF0; --cyto-soft:#2B2442;
+  --good:#5BD38B; --good-soft:#173A25; --bad:#F07A92; --bad-soft:#401D26; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:16px 56px;display:grid;gap:16px}
+header{background:var(--leaf);color:var(--on-leaf);border-radius:20px;padding:20px 22px;display:grid;gap:6px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;border:14px solid rgba(255,255,255,.14)}
+header::before{content:"";position:absolute;right:30px;top:30px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,6vw,36px);line-height:1.1;margin:0;text-wrap:balance;position:relative;z-index:1}
+header p{margin:0;opacity:.92;position:relative;z-index:1}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--leaf);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--on-leaf)}
+.chip small{font-weight:500;opacity:.75;margin-left:4px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line)}
+.tab{border:0;background:none;padding:10px 14px;font-family:var(--display);font-weight:600;font-size:18px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab[aria-selected="true"]{color:var(--leaf);border-bottom-color:var(--sun)}
+.tools{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.tools label{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:15px}
+.tools input[type=checkbox]{width:18px;height:18px;accent-color:var(--leaf)}
+select{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:6px 8px}
+.btn{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;line-height:1.2}
+.btn:hover{border-color:var(--leaf)}
+.btn.main{background:var(--leaf);border-color:var(--leaf);color:var(--on-leaf)}
+.btn.alt{border-color:var(--cyto);color:var(--cyto)}
+.meta{color:var(--muted);font-size:14px;margin:0}
+.meta b{color:var(--ink)}
+.list{display:grid;gap:10px}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.num{color:var(--muted);font-variant-numeric:tabular-nums;font-size:14px;padding-top:6px;grid-row:span 6}
+.en{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.word{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.2;background:linear-gradient(transparent 58%,var(--sun-soft) 58%);padding-inline:2px}
+.pos{font-size:12px;font-weight:600;color:var(--cyto);background:var(--cyto-soft);border-radius:6px;padding:1px 8px}
+.say{border:0;background:var(--sun);color:#2A1F05;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:13px;flex:none}
+.ipa{font-family:var(--ipa);color:var(--muted)}
+.vi{font-weight:700;font-size:17px}
+.ex{font-style:italic;margin:0}
+.exvi{color:var(--muted);font-size:14px;margin:0}
+.topic{font-size:12px;color:var(--leaf);font-weight:600}
+.hide-en .c-en,.hide-vi .c-vi{filter:blur(7px);cursor:pointer;transition:filter .15s}
+.hide-en .c-en.peek,.hide-vi .c-vi.peek{filter:none}
+/* Thẻ lớn */
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 92%,transparent);z-index:10;display:grid;place-items:center;padding:16px;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+.big{width:100%;max-width:520px;display:grid;gap:14px}
+.bigcard{min-height:280px;border:3px solid var(--leaf);border-radius:24px;background:var(--surface);box-shadow:0 6px 0 var(--leaf);display:grid;place-content:center;gap:10px;padding:24px;text-align:center;cursor:pointer}
+.bigcard .word{font-size:clamp(30px,8vw,44px)}
+.bigcard.flip{background:var(--leaf-soft)}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);min-width:70px;text-align:center}
+/* Trò chơi */
+.gpick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gbtn{border:2px solid var(--line);border-bottom-width:5px;background:var(--surface);border-radius:14px;padding:10px 12px;text-align:left;cursor:pointer}
+.gbtn b{display:block;font-family:var(--display);font-size:17px}
+.gbtn span{font-size:13px;color:var(--muted)}
+.gbtn[aria-pressed="true"]{border-color:var(--leaf);background:var(--leaf-soft)}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 16px;display:grid;gap:14px;justify-items:center;min-height:320px;align-content:start}
+.score{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:center;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.score b{color:var(--ink)}
+.prompt{font-family:var(--display);font-weight:700;font-size:clamp(24px,6vw,36px);line-height:1.15;text-align:center;text-wrap:balance}
+.sub{color:var(--muted);text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:560px}
+.opt{border:2px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;font-weight:600;cursor:pointer;text-align:left;min-width:0;overflow-wrap:anywhere}
+.opt.ok{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.opt.no{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:560px}
+.tile{border:2px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 8px;min-height:56px;cursor:pointer;font-weight:600;overflow-wrap:anywhere;font-size:15px}
+.tile.en-t{font-family:var(--display);background:var(--sun-soft)}
+.tile.sel{border-color:var(--leaf);outline:2px solid var(--leaf)}
+.tile.done{background:var(--good-soft);border-color:var(--good);color:var(--good);cursor:default}
+.tile.miss{background:var(--bad-soft);border-color:var(--bad)}
+.spell{display:flex;gap:8px;width:100%;max-width:440px}
+.spell input{flex:1;min-width:0;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:18px}
+.fb{font-weight:700;min-height:1.5em;text-align:center}
+.fb.ok{color:var(--good)} .fb.no{color:var(--bad)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;max-width:calc(100% - 32px);z-index:20;text-align:center}
+footer{color:var(--muted);font-size:13px;text-align:center}
+@media (max-width:420px){.opts,.grid{grid-template-columns:1fr}.term{padding:12px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Thuật ngữ Sinh học 10</h1>
+    <p>Từ vựng tiếng Anh chuyên ngành · Thầy Hậu · THPT Tân Lược</p>
+  </header>
+
+  <section>
+    <p class="lbl">Chủ đề</p>
+    <div class="chips" id="topics"></div>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-list" aria-selected="true">Bảng từ</button>
+    <button class="tab" role="tab" id="tab-game" aria-selected="false">Trò chơi ôn bài</button>
+  </div>
+
+  <section id="view-list" class="list-view" style="display:grid;gap:12px">
+    <p class="meta"><b id="cnt">0 từ</b> · Bấm ▶ để nghe. Tick ô "Che" để tự kiểm tra, chạm vào chữ bị che để xem.</p>
+    <div class="tools">
+      <label for="rate">Tốc độ
+        <select id="rate"><option value="0.6">Chậm</option><option value="0.85" selected>Vừa</option><option value="1">Nhanh</option></select>
+      </label>
+      <label><input type="checkbox" id="hideEn"> Che tiếng Anh</label>
+      <label><input type="checkbox" id="hideVi"> Che tiếng Việt</label>
+      <button class="btn alt" id="openCards">Học từng thẻ</button>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="view-game" hidden style="display:grid;gap:12px">
+    <div class="gpick" id="gpick">
+      <button class="gbtn" data-g="quiz" aria-pressed="true"><b>Trắc nghiệm</b><span>Thấy từ tiếng Anh, chọn nghĩa</span></button>
+      <button class="gbtn" data-g="listen" aria-pressed="false"><b>Nghe và chọn</b><span>Nghe phát âm, chọn đúng từ</span></button>
+      <button class="gbtn" data-g="match" aria-pressed="false"><b>Ghép đôi</b><span>Nối từ Anh với nghĩa Việt</span></button>
+      <button class="gbtn" data-g="spell" aria-pressed="false"><b>Gõ từ</b><span>Đọc nghĩa, gõ từ tiếng Anh</span></button>
+    </div>
+    <div class="stage" id="stage"></div>
+  </section>
+
+  <footer>Bộ từ bám theo chương trình Sinh học 10 (Kết nối tri thức).</footer>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="big">
+    <div class="bigcard" id="bigcard" role="button" tabindex="0" aria-label="Chạm để lật thẻ"></div>
+    <div class="row">
+      <button class="btn" id="prev">← Trước</button>
+      <span class="count" id="bigcount"></span>
+      <button class="btn" id="next">Sau →</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="bigsay">▶ Nghe</button>
+      <button class="btn" id="shuffle">Trộn thẻ</button>
+      <button class="btn main" id="closeCards">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOPICS=["Thành phần hóa học","Cấu trúc tế bào","Trao đổi chất","Chu kì tế bào","Vi sinh vật & CN tế bào"];
+// [chủ đề, từ, IPA, từ loại, nghĩa, ví dụ, dịch ví dụ]
+const RAW=[
+[0,"cell","/sel/","Danh từ","tế bào","The cell is the basic unit of life.","Tế bào là đơn vị cơ bản của sự sống."],
+[0,"protein","/ˈprəʊtiːn/","Danh từ","prôtêin","Enzymes are proteins that speed up reactions.","Enzyme là các prôtêin giúp tăng tốc phản ứng."],
+[0,"amino acid","/əˌmiːnəʊ ˈæsɪd/","Danh từ","axit amin","Proteins are made of amino acids.","Prôtêin được cấu tạo từ các axit amin."],
+[0,"carbohydrate","/ˌkɑːbəʊˈhaɪdreɪt/","Danh từ","cacbohiđrat (đường bột)","Rice is rich in carbohydrates.","Gạo giàu cacbohiđrat."],
+[0,"glucose","/ˈɡluːkəʊs/","Danh từ","glucôzơ","Glucose is the main fuel of the cell.","Glucôzơ là nguồn nhiên liệu chính của tế bào."],
+[0,"lipid","/ˈlɪpɪd/","Danh từ","lipit","Lipids store energy for the body.","Lipit dự trữ năng lượng cho cơ thể."],
+[0,"nucleic acid","/njuːˌkliːɪk ˈæsɪd/","Danh từ","axit nuclêic","DNA and RNA are nucleic acids.","ADN và ARN là các axit nuclêic."],
+[0,"trace element","/ˈtreɪs ˌelɪmənt/","Danh từ","nguyên tố vi lượng","Iron is a trace element in our body.","Sắt là một nguyên tố vi lượng trong cơ thể."],
+[1,"membrane","/ˈmembreɪn/","Danh từ","màng (tế bào)","The cell membrane controls what enters the cell.","Màng tế bào kiểm soát các chất đi vào tế bào."],
+[1,"cell wall","/ˈsel wɔːl/","Danh từ","thành tế bào","Plant cells have a cell wall.","Tế bào thực vật có thành tế bào."],
+[1,"cytoplasm","/ˈsaɪtəʊplæzəm/","Danh từ","tế bào chất","Many reactions happen in the cytoplasm.","Nhiều phản ứng diễn ra trong tế bào chất."],
+[1,"nucleus","/ˈnjuːkliəs/","Danh từ","nhân tế bào","The nucleus contains DNA.","Nhân tế bào chứa ADN."],
+[1,"mitochondrion","/ˌmaɪtəˈkɒndriən/","Danh từ","ti thể","The mitochondrion produces ATP for the cell.","Ti thể tạo ra ATP cho tế bào."],
+[1,"chloroplast","/ˈklɔːrəplɑːst/","Danh từ","lục lạp","Chloroplasts make leaves green.","Lục lạp làm cho lá có màu xanh."],
+[1,"ribosome","/ˈraɪbəsəʊm/","Danh từ","ribôxôm","Ribosomes build proteins.","Ribôxôm tổng hợp prôtêin."],
+[1,"prokaryote","/prəʊˈkæriəʊt/","Danh từ","sinh vật nhân sơ","Bacteria are prokaryotes.","Vi khuẩn là sinh vật nhân sơ."],
+[1,"eukaryote","/juːˈkæriəʊt/","Danh từ","sinh vật nhân thực","Humans and plants are eukaryotes.","Con người và thực vật là sinh vật nhân thực."],
+[2,"metabolism","/məˈtæbəlɪzəm/","Danh từ","trao đổi chất","Exercise can boost your metabolism.","Tập thể dục giúp tăng cường trao đổi chất."],
+[2,"enzyme","/ˈenzaɪm/","Danh từ","enzim","Enzymes in saliva break down starch.","Enzim trong nước bọt phân giải tinh bột."],
+[2,"diffusion","/dɪˈfjuːʒn/","Danh từ","sự khuếch tán","Oxygen enters the cell by diffusion.","Ôxi đi vào tế bào bằng khuếch tán."],
+[2,"osmosis","/ɒzˈməʊsɪs/","Danh từ","sự thẩm thấu","Water moves into roots by osmosis.","Nước đi vào rễ nhờ thẩm thấu."],
+[2,"active transport","/ˌæktɪv ˈtrænspɔːt/","Danh từ","vận chuyển chủ động","Active transport needs energy from ATP.","Vận chuyển chủ động cần năng lượng từ ATP."],
+[2,"photosynthesis","/ˌfəʊtəʊˈsɪnθəsɪs/","Danh từ","quang hợp","Rice plants need sunlight for photosynthesis.","Cây lúa cần ánh sáng để quang hợp."],
+[2,"respiration","/ˌrespəˈreɪʃn/","Danh từ","hô hấp (tế bào)","Cellular respiration releases energy.","Hô hấp tế bào giải phóng năng lượng."],
+[3,"cell cycle","/ˈsel ˌsaɪkl/","Danh từ","chu kì tế bào","The cell cycle has interphase and cell division.","Chu kì tế bào gồm kì trung gian và phân bào."],
+[3,"interphase","/ˈɪntəfeɪz/","Danh từ","kì trung gian","DNA is copied during interphase.","ADN được nhân đôi ở kì trung gian."],
+[3,"chromosome","/ˈkrəʊməsəʊm/","Danh từ","nhiễm sắc thể","Human cells have 46 chromosomes.","Tế bào người có 46 nhiễm sắc thể."],
+[3,"mitosis","/maɪˈtəʊsɪs/","Danh từ","nguyên phân","Mitosis makes two identical cells.","Nguyên phân tạo ra hai tế bào giống nhau."],
+[3,"meiosis","/maɪˈəʊsɪs/","Danh từ","giảm phân","Meiosis produces sex cells.","Giảm phân tạo ra giao tử."],
+[3,"cancer","/ˈkænsə(r)/","Danh từ","ung thư","Cancer is uncontrolled cell division.","Ung thư là sự phân chia tế bào mất kiểm soát."],
+[4,"stem cell","/ˈstem sel/","Danh từ","tế bào gốc","Stem cells can become many cell types.","Tế bào gốc có thể biệt hóa thành nhiều loại tế bào."],
+[4,"tissue culture","/ˈtɪʃuː ˌkʌltʃə(r)/","Danh từ","nuôi cấy mô","Orchids are grown by tissue culture.","Hoa lan được nhân giống bằng nuôi cấy mô."],
+[4,"microorganism","/ˌmaɪkrəʊˈɔːɡənɪzəm/","Danh từ","vi sinh vật","Microorganisms are too small to see with the eye.","Vi sinh vật quá nhỏ để nhìn bằng mắt thường."],
+[4,"bacteria","/bækˈtɪəriə/","Danh từ (số nhiều)","vi khuẩn","Some bacteria help us digest food.","Một số vi khuẩn giúp tiêu hóa thức ăn."],
+[4,"virus","/ˈvaɪrəs/","Danh từ","virut","A virus can only multiply inside living cells.","Virut chỉ nhân lên được bên trong tế bào sống."],
+[4,"fermentation","/ˌfɜːmenˈteɪʃn/","Danh từ","sự lên men","Pickled vegetables are made by fermentation.","Dưa muối được làm bằng quá trình lên men."],
+[4,"vaccine","/ˈvæksiːn/","Danh từ","vắc xin","A vaccine helps the body fight disease.","Vắc xin giúp cơ thể chống lại bệnh."]
+];
+const ALL=RAW.map((r,i)=>({id:i,t:r[0],en:r[1],ipa:r[2],pos:r[3],vi:r[4],ex:r[5],exvi:r[6]}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let topic=-1, game="quiz";
+const pool=()=>topic<0?ALL:ALL.filter(w=>w.t===topic);
+
+// Phát âm
+let voice=null;
+function pickVoice(){try{const v=speechSynthesis.getVoices();voice=v.find(x=>/en[-_]US/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+let audio=null,toastT=null;
+function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.className="toast";document.body.appendChild(t)}t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,4000)}
+function sayOnline(text){
+  try{if(audio)audio.pause();
+    audio=new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&ttsspeed="+($("#rate").value<0.8?"0.4":"1")+"&q="+encodeURIComponent(text));
+    audio.onerror=()=>toast("Máy chưa đọc được. Mở app bằng Chrome và bật âm lượng nhé.");
+    const p=audio.play();if(p&&p.catch)p.catch(()=>toast("Máy chưa đọc được. Mở app bằng Chrome và bật âm lượng nhé."));
+  }catch(e){toast("Máy chưa đọc được. Mở app bằng Chrome và bật âm lượng nhé.")}
+}
+function say(text){
+  const ss=window.speechSynthesis;
+  if(!ss||!window.SpeechSynthesisUtterance){sayOnline(text);return}
+  try{
+    if(!voice)pickVoice();
+    ss.cancel();
+    const u=new SpeechSynthesisUtterance(text);u.lang="en-US";if(voice)u.voice=voice;u.rate=+$("#rate").value;
+    let started=false;u.onstart=()=>{started=true};u.onerror=()=>{if(!started){started=true;sayOnline(text)}};
+    ss.speak(u);
+    setTimeout(()=>{if(!started&&!ss.speaking){started=true;ss.cancel();sayOnline(text)}},900);
+  }catch(e){sayOnline(text)}
+}
+
+// Chủ đề
+function renderTopics(){
+  const opts=[[-1,"Tất cả",ALL.length],...TOPICS.map((n,i)=>[i,n,ALL.filter(w=>w.t===i).length])];
+  $("#topics").innerHTML=opts.map(([i,n,c])=>`<button class="chip" data-t="${i}" aria-pressed="${i===topic}">${esc(n)}<small>${c}</small></button>`).join("");
+}
+$("#topics").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;topic=+b.dataset.t;renderTopics();renderList();startGame()});
+
+// Bảng từ
+function renderList(){
+  const p=pool();
+  $("#cnt").textContent=p.length+" từ";
+  $("#list").innerHTML=p.map((w,k)=>`<article class="term">
+    <span class="num">${k+1}</span>
+    <div class="en"><span class="c-en"><span class="word">${esc(w.en)}</span></span><button class="say" data-say="${esc(w.en)}" aria-label="Nghe ${esc(w.en)}">▶</button><span class="pos">${esc(w.pos)}</span></div>
+    <div class="ipa c-en">${esc(w.ipa)}</div>
+    <div class="vi c-vi">${esc(w.vi)}</div>
+    <p class="ex">${esc(w.ex)} <button class="say" data-say="${esc(w.ex)}" aria-label="Nghe câu ví dụ" style="width:26px;height:26px;font-size:11px">▶</button></p>
+    <p class="exvi c-vi">${esc(w.exvi)}</p>
+    ${topic<0?`<span class="topic">${esc(TOPICS[w.t])}</span>`:""}
+  </article>`).join("");
+}
+$("#list").addEventListener("click",e=>{
+  const s=e.target.closest("[data-say]");if(s){say(s.dataset.say);return}
+  const c=e.target.closest(".c-en,.c-vi");if(c)c.classList.toggle("peek");
+});
+$("#hideEn").addEventListener("change",e=>$("#list").classList.toggle("hide-en",e.target.checked));
+$("#hideVi").addEventListener("change",e=>$("#list").classList.toggle("hide-vi",e.target.checked));
+
+// Tab
+function setTab(g){
+  $("#tab-list").setAttribute("aria-selected",!g);$("#tab-game").setAttribute("aria-selected",g);
+  $("#view-list").hidden=g;$("#view-game").hidden=!g;
+  if(g)startGame();
+}
+$("#tab-list").onclick=()=>setTab(false);$("#tab-game").onclick=()=>setTab(true);
+
+// Thẻ lớn
+let deck=[],di=0,flipped=false;
+function drawCard(){
+  const w=deck[di],c=$("#bigcard");if(!w)return;c.classList.toggle("flip",flipped);
+  c.innerHTML=flipped
+   ?`<div class="vi" style="font-size:28px">${esc(w.vi)}</div><p class="ex">${esc(w.ex)}</p><p class="exvi">${esc(w.exvi)}</p>`
+   :`<div><span class="word">${esc(w.en)}</span></div><div class="ipa">${esc(w.ipa)}</div><span class="pos" style="justify-self:center">${esc(w.pos)}</span><p class="sub" style="margin:0">Chạm để xem nghĩa</p>`;
+  $("#bigcount").textContent=(di+1)+" / "+deck.length;
+}
+function openCards(){deck=pool().slice();di=0;flipped=false;$("#overlay").hidden=false;drawCard();say(deck[0].en)}
+$("#openCards").onclick=openCards;
+$("#closeCards").onclick=()=>{$("#overlay").hidden=true};
+$("#bigcard").onclick=()=>{flipped=!flipped;drawCard()};
+$("#bigcard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipped=!flipped;drawCard()}};
+const hasDeck=()=>deck.length>0;
+$("#prev").onclick=()=>{if(!hasDeck())return;di=(di-1+deck.length)%deck.length;flipped=false;drawCard();say(deck[di].en)};
+$("#next").onclick=()=>{if(!hasDeck())return;di=(di+1)%deck.length;flipped=false;drawCard();say(deck[di].en)};
+$("#bigsay").onclick=()=>{if(hasDeck())say(deck[di].en)};
+$("#shuffle").onclick=()=>{if(!hasDeck())return;deck=shuf(deck);di=0;flipped=false;drawCard()};
+
+// Trò chơi
+const st={q:[],i:0,ok:0,no:0};
+$("#gpick").addEventListener("click",e=>{const b=e.target.closest(".gbtn");if(!b)return;game=b.dataset.g;document.querySelectorAll(".gbtn").forEach(x=>x.setAttribute("aria-pressed",x===b));startGame()});
+function scoreBar(){return `<div class="score"><span>Câu <b>${Math.min(st.i+1,st.q.length)}/${st.q.length}</b></span><span>Đúng <b>${st.ok}</b></span><span>Sai <b>${st.no}</b></span></div>`}
+function startGame(){
+  const p=pool();st.ok=0;st.no=0;st.i=0;
+  if(game==="match"){st.q=shuf(p).slice(0,Math.min(6,p.length));return drawMatch()}
+  st.q=shuf(p).slice(0,Math.min(10,p.length));drawQ();
+}
+function finish(){
+  const tot=st.ok+st.no,pct=tot?Math.round(st.ok/tot*100):0;
+  $("#stage").innerHTML=`<div class="prompt">${pct>=80?"Giỏi lắm!":pct>=50?"Khá tốt!":"Cố lên nhé!"}</div><p class="sub">Đúng ${st.ok} / ${tot} lượt (${pct}%)</p><button class="btn main" id="again">Chơi lại</button>`;
+  $("#again").onclick=startGame;
+}
+function distract(w,key){return shuf(pool().length>=4?pool():ALL).filter(x=>x.id!==w.id).slice(0,3).map(x=>x[key])}
+function drawQ(){
+  if(st.i>=st.q.length)return finish();
+  const w=st.q[st.i],S=$("#stage");
+  if(game==="spell"){
+    S.innerHTML=scoreBar()+`<p class="sub">Gõ từ tiếng Anh có nghĩa là</p><div class="prompt">${esc(w.vi)}</div><p class="sub">Gợi ý: bắt đầu bằng "${esc(w.en[0])}", ${w.en.length} kí tự</p>
+     <form class="spell" id="sf"><input id="sin" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Từ tiếng Anh"><button class="btn main">Kiểm tra</button></form><div class="fb" id="fb"></div>`;
+    $("#sin").focus();
+    $("#sf").onsubmit=e=>{e.preventDefault();const v=$("#sin").value.trim().toLowerCase();if(!v)return;
+      const ok=v===w.en.toLowerCase();ok?st.ok++:st.no++;say(w.en);
+      $("#fb").className="fb "+(ok?"ok":"no");$("#fb").textContent=ok?"Chính xác!":"Đáp án: "+w.en;
+      $("#sin").disabled=true;setTimeout(()=>{st.i++;drawQ()},ok?1100:2000)};
+    return;
+  }
+  const listen=game==="listen",key=listen?"en":"vi",right=w[key];
+  const opts=shuf([right,...distract(w,key)]);
+  S.innerHTML=scoreBar()+(listen
+    ?`<p class="sub">Nghe rồi chọn từ đúng</p><button class="btn main" id="replay" style="font-size:20px;padding:14px 22px">▶ Nghe lại</button>`
+    :`<p class="sub">Chọn nghĩa tiếng Việt</p><div class="prompt">${esc(w.en)}</div><div class="ipa">${esc(w.ipa)}</div>`)
+    +`<div class="opts">${opts.map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div><div class="fb" id="fb"></div>`;
+  say(w.en);
+  if(listen)$("#replay").onclick=()=>say(w.en);
+  S.querySelector(".opts").onclick=e=>{const b=e.target.closest(".opt");if(!b)return;
+    const ok=b.dataset.o===right;ok?st.ok++:st.no++;
+    S.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.o===right)x.classList.add("ok")});
+    if(!ok)b.classList.add("no");
+    $("#fb").className="fb "+(ok?"ok":"no");$("#fb").textContent=ok?"Đúng rồi!":(listen?"Đó là: ":"Nghĩa đúng: ")+right+(listen?" ("+w.vi+")":"");
+    setTimeout(()=>{st.i++;drawQ()},ok?900:1800)};
+}
+function drawMatch(){
+  const S=$("#stage"),ws=st.q;let left=ws.length,sel=null;
+  const tiles=shuf([...ws.map(w=>({id:w.id,txt:w.en,en:1})),...ws.map(w=>({id:w.id,txt:w.vi,en:0}))]);
+  S.innerHTML=`<div class="score"><span>Còn <b id="left">${left}</b> cặp</span><span>Sai <b id="miss">0</b></span></div><p class="sub">Chạm một ô tiếng Anh và một ô nghĩa tiếng Việt cho khớp</p>
+   <div class="grid">${tiles.map((t,k)=>`<button class="tile ${t.en?"en-t":""}" data-k="${k}">${esc(t.txt)}</button>`).join("")}</div>`;
+  S.querySelector(".grid").onclick=e=>{const b=e.target.closest(".tile");if(!b||b.classList.contains("done"))return;
+    const t=tiles[+b.dataset.k];if(t.en)say(t.txt);
+    if(!sel){sel=b;b.classList.add("sel");return}
+    if(sel===b){b.classList.remove("sel");sel=null;return}
+    const s=tiles[+sel.dataset.k];
+    if(s.id===t.id&&s.en!==t.en){[sel,b].forEach(x=>{x.classList.remove("sel");x.classList.add("done")});st.ok++;left--;$("#left").textContent=left;
+      if(!left)setTimeout(finish,600)}
+    else{st.no++;$("#miss").textContent=st.no;const a=sel;[a,b].forEach(x=>x.classList.add("miss"));setTimeout(()=>[a,b].forEach(x=>x.classList.remove("miss","sel")),500)}
+    sel=null};
+}
+
+renderTopics();renderList();
+</script>
+</body>
+</html>
