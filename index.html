@@ -71,11 +71,18 @@ select{background:var(--surface);border:2px solid var(--line);border-radius:10px
 .fig svg{display:block;width:100%;height:auto}
 .big-fig{max-width:300px;justify-self:center;margin:0 auto}
 .gfig{width:100%;max-width:320px;margin:0}
+.btn3d{margin-top:8px;border-color:var(--cyto);color:var(--cyto);background:var(--cyto-soft)}
+.m3dbox{width:100%;max-width:760px;display:grid;gap:10px}
+.m3dhead{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--display);font-size:20px}
+.m3dframe{position:relative;width:100%;aspect-ratio:4/3;max-height:70vh;border-radius:16px;overflow:hidden;background:#101812;border:2px solid var(--line)}
+.m3dframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.credit{font-size:12px;color:var(--muted);margin:0}
+a{color:var(--leaf)}
 .topic{font-size:12px;color:var(--leaf);font-weight:600}
 .hide-en .c-en,.hide-vi .c-vi{filter:blur(7px);cursor:pointer;transition:filter .15s}
 .hide-en .c-en.peek,.hide-vi .c-vi.peek{filter:none}
 /* Thẻ lớn */
-.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 92%,transparent);z-index:10;display:grid;place-items:center;padding:16px;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+.overlay{position:fixed;inset:0;background:var(--bg);overflow:auto;z-index:10;display:grid;place-items:center;padding:16px;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
 .big{width:100%;max-width:520px;display:grid;gap:14px}
 .bigcard{min-height:280px;border:3px solid var(--leaf);border-radius:24px;background:var(--surface);box-shadow:0 6px 0 var(--leaf);display:grid;place-content:center;gap:10px;padding:24px;text-align:center;cursor:pointer}
 .bigcard .word{font-size:clamp(30px,8vw,44px)}
@@ -174,6 +181,15 @@ footer{color:var(--muted);font-size:13px;text-align:center}
   </div>
 </div>
 
+<div class="overlay" id="m3d" hidden>
+  <div class="m3dbox">
+    <div class="m3dhead"><b id="m3dTitle"></b><button class="btn main" id="m3dClose">Đóng</button></div>
+    <div class="m3dframe"><iframe id="m3dFrame" title="Mô hình 3D" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen src="about:blank"></iframe></div>
+    <p class="meta">Dùng một ngón tay để xoay, hai ngón để phóng to. Không thấy mô hình? <a id="m3dOpen" href="#" target="_blank" rel="noopener">Mở trên Sketchfab</a>.</p>
+    <p class="credit" id="m3dCredit"></p>
+  </div>
+</div>
+
 <script>
 const TOPICS=["Thành phần hóa học","Cấu trúc tế bào","Trao đổi chất","Chu kì tế bào","Vi sinh vật & CN tế bào"];
 // [chủ đề, từ, IPA, từ loại, nghĩa, ví dụ, dịch ví dụ]
@@ -237,6 +253,22 @@ const FIG={
  "bacteria":`${[[16,20,0],[70,50,20],[30,70,-12]].map(([x,y,r])=>`<rect x="${x}" y="${y}" width="56" height="22" rx="11" transform="rotate(${r} ${x+28} ${y+11})" fill="#DCEBFF" stroke="#3B7BC4" stroke-width="2.5"/>`).join("")}`+T(150,20,"trực khuẩn","end"),
  "virus":`<polygon points="72,12 98,27 98,57 72,72 46,57 46,27" fill="#FCE4EA" stroke="#C73A55" stroke-width="2.5"/><path d="M60 34 q6 8 12 0 t12 0 M60 50 q6 8 12 0 t12 0" fill="none" stroke="#5B3FA8" stroke-width="2"/><rect x="67" y="72" width="10" height="22" fill="#E7A1B2" stroke="#C73A55" stroke-width="1.5"/><path d="M67 94 L50 106 M77 94 L94 106 M70 94 L62 108 M74 94 L82 108" stroke="#C73A55" stroke-width="2"/>`+T(104,30,"vỏ capsit")+L(102,33,96,38)+T(104,52,"vật chất")+T(104,62,"di truyền")+L(102,55,84,52)
 };
+// Mô hình 3D từ Sketchfab (giấy phép CC BY 4.0): [uid, tên mô hình, tác giả]
+const M3D={
+ "cell":["839832a82ead4d9ea3a748f48fd5de88","Simple Animal Cell Model","maryk"],
+ "eukaryote":["0d9f7f4257224975b2ef83a283709b2f","Animal cell 2.0 - annotated in English","montanna"],
+ "nucleus":["0d9f7f4257224975b2ef83a283709b2f","Animal cell 2.0 - annotated in English","montanna"],
+ "cytoplasm":["0d9f7f4257224975b2ef83a283709b2f","Animal cell 2.0 - annotated in English","montanna"],
+ "membrane":["b3564ec834f84397a3188edab5e5acd9","Cell membrane","Lukas Ded"],
+ "cell wall":["0640c7a14f41400fbdac382c7de1d776","Plant Cell | Biology","Oliver (okchs)"],
+ "mitochondrion":["7445a425050e49daa881070ca6917a91","Mitochondria","brianj.seely"],
+ "chloroplast":["30bc55b2f763415f9222f876c564be97","Chloroplast","arloopa"],
+ "chromosome":["4ab2fe1dfcba469097e2d0fe4a0f942b","Chromosome X","LucasPresoto"],
+ "prokaryote":["19618642dad34d0b82219c162aa522e8","Bacterial Cell / Bacterium","Module Studio's"],
+ "bacteria":["19618642dad34d0b82219c162aa522e8","Bacterial Cell / Bacterium","Module Studio's"],
+ "virus":["9b791066661241bfbf37327fa9cbd473","Corona Virus COVID-19","Fantom Matter"],
+ "nucleic acid":["17cb3bb0472049f8aa0eda9c60db9cf5","Professional realistic DNA Fragment 3D model","Eclipse-studios"]
+};
 const fig=en=>FIG[en]?`<svg viewBox="0 0 150 110" role="img" aria-label="Hình minh họa ${en}">${FIG[en]}</svg>`:"";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -289,15 +321,28 @@ function renderList(){
     <p class="ex">${esc(w.ex)} <button class="say" data-say="${esc(w.ex)}" aria-label="Nghe câu ví dụ" style="width:26px;height:26px;font-size:11px">▶</button></p>
     <p class="exvi c-vi">${esc(w.exvi)}</p>
     ${FIG[w.en]?`<div class="fig">${fig(w.en)}</div>`:""}
+    ${M3D[w.en]?`<div><button class="btn btn3d" data-m3d="${esc(w.en)}">Xem mô hình 3D xoay được</button></div>`:""}
     ${topic<0?`<span class="topic">${esc(TOPICS[w.t])}</span>`:""}
   </article>`).join("");
 }
 $("#list").addEventListener("click",e=>{
+  const m=e.target.closest("[data-m3d]");if(m){open3d(m.dataset.m3d);return}
   const s=e.target.closest("[data-say]");if(s){say(s.dataset.say);return}
   const c=e.target.closest(".c-en,.c-vi");if(c)c.classList.toggle("peek");
 });
 $("#hideEn").addEventListener("change",e=>$("#list").classList.toggle("hide-en",e.target.checked));
 $("#hideVi").addEventListener("change",e=>$("#list").classList.toggle("hide-vi",e.target.checked));
+
+// Xem 3D
+function open3d(en){
+  const [uid,name,author]=M3D[en],w=ALL.find(x=>x.en===en),page="https://sketchfab.com/3d-models/"+uid;
+  $("#m3dTitle").textContent=w.en+" · "+w.vi;
+  $("#m3dFrame").src="https://sketchfab.com/models/"+uid+"/embed?autostart=1&ui_infos=0&ui_watermark_link=0&ui_hint=2";
+  $("#m3dCredit").innerHTML=`Mô hình: <a href="${page}" target="_blank" rel="noopener">${esc(name)}</a> · tác giả ${esc(author)} · Sketchfab, giấy phép <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>`;
+  $("#m3dOpen").href=page;
+  $("#m3d").hidden=false;
+}
+$("#m3dClose").onclick=()=>{$("#m3d").hidden=true;$("#m3dFrame").src="about:blank"};
 
 // Tab
 function setTab(g){
